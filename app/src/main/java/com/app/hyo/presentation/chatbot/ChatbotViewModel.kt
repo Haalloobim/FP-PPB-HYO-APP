@@ -1,5 +1,6 @@
 package com.app.hyo.presentation.chatbot
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.hyo.R // For placeholder image
@@ -48,6 +49,7 @@ class ChatbotViewModel @Inject constructor(
         _shouldShowSuggestions.value = true // Show suggestions after bot's first message
     }
 
+    @SuppressLint("DefaultLocale")
     fun onEvent(event: ChatbotEvent) {
         when (event) {
             is ChatbotEvent.SendMessage -> {
