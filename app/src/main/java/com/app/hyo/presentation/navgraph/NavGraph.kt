@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.app.hyo.presentation.camerax.SignLanguageCameraScreen
 import com.app.hyo.presentation.dashboard.DashboardScreen
 // import com.app.hyo.presentation.dashboard.DashboardViewModel // Uncomment if needed directly
 import com.app.hyo.presentation.login.LoginScreen
@@ -95,22 +96,20 @@ fun NavGraph(
                         // navController.navigate("profile_screen_route")
                     },
                     onNavigateToRoute = { route ->
-                        // Handle bottom navigation clicks
-                        // This is a simplified example. You might want a more robust
-                        // navigation setup for bottom bar items, potentially with its own NavHost.
+
                         navController.navigate(route) {
-                            // Pop up to the start destination of the graph to
-                            // avoid building up a large stack of destinations
-                            // on the back stack as users select items
-//                            popUpTo(navController.graph.findStartDestination()?.id ?: Route.DashboardScreen.route) {
-//                                saveState = true
-//                            }
-                            // Avoid multiple copies of the same destination when
-                            // reselecting the same item
+
                             launchSingleTop = true
                             // Restore state when reselecting a previously selected item
                             restoreState = true
                         }
+                    }
+                )
+            }
+            composable(route = "sign_language_camera_screen_route") {
+                SignLanguageCameraScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
                     }
                 )
             }
