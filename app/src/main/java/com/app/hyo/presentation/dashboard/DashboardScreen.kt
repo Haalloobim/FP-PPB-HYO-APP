@@ -14,7 +14,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.CameraAlt // Icon for camera/recognition
+import androidx.compose.material.icons.filled.CameraAlt// Icon for camera/recognition
 import androidx.compose.material.icons.filled.Book // Icon for dictionary/learn
 import androidx.compose.material.icons.filled.School // Icon for learn/practice
 import androidx.compose.material.icons.filled.People // Icon for community
@@ -64,7 +64,7 @@ fun DashboardScreen(
             TopAppBar(
                 title = {
                     Text(
-                        "HYO", // Changed from "TUMBAS" to "HYO" as per your latest code
+                        text = "HYO",
                         fontFamily = Poppins,
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp
@@ -196,9 +196,9 @@ fun DashboardScreen(
                 ) {
                     DashboardCard(
                         modifier = Modifier.weight(1f),
-                        icon = Icons.Filled.Book,
-                        title = "Learn ISL",
-                        onClick = { onNavigateToRoute(AppRoutes.LEARN_ISL_SCREEN) }
+                        icon = Icons.Filled.Search, // Or a specific dictionary icon
+                        title = "ISL Dictionary",
+                        onClick = { onNavigateToRoute(AppRoutes.DICTIONARY_SCREEN) }
                     )
                     DashboardCard(
                         modifier = Modifier.weight(1f),
@@ -212,33 +212,33 @@ fun DashboardScreen(
             item { Spacer(modifier = Modifier.height(Dimens.MediumPadding2)) }
 
             // ISL Dictionary & Community Section
-            item {
-                Text(
-                    text = "Resources",
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = Poppins
-                    ),
-                    modifier = Modifier.padding(bottom = Dimens.SmallPadding2)
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.MediumPadding1)
-                ) {
-                    DashboardCard(
-                        modifier = Modifier.weight(1f),
-                        icon = Icons.Filled.Search, // Or a specific dictionary icon
-                        title = "ISL Dictionary",
-                        onClick = { onNavigateToRoute(AppRoutes.DICTIONARY_SCREEN) }
-                    )
-                    DashboardCard(
-                        modifier = Modifier.weight(1f),
-                        icon = Icons.Filled.People,
-                        title = "Community",
-                        onClick = { onNavigateToRoute(AppRoutes.COMMUNITY_SCREEN) }
-                    )
-                }
-            }
+//            item {
+//                Text(
+//                    text = "Resources",
+//                    style = MaterialTheme.typography.headlineSmall.copy(
+//                        fontWeight = FontWeight.Bold,
+//                        fontFamily = Poppins
+//                    ),
+//                    modifier = Modifier.padding(bottom = Dimens.SmallPadding2)
+//                )
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.spacedBy(Dimens.MediumPadding1)
+//                ) {
+//                    DashboardCard(
+//                        modifier = Modifier.weight(1f),
+//                        icon = Icons.Filled.Search, // Or a specific dictionary icon
+//                        title = "ISL Dictionary",
+//                        onClick = { onNavigateToRoute(AppRoutes.DICTIONARY_SCREEN) }
+//                    )
+//                    DashboardCard(
+//                        modifier = Modifier.weight(1f),
+//                        icon = Icons.Filled.People,
+//                        title = "Community",
+//                        onClick = { onNavigateToRoute(AppRoutes.COMMUNITY_SCREEN) }
+//                    )
+//                }
+//            }
             item { Spacer(modifier = Modifier.height(Dimens.MediumPadding2)) } // Space at the bottom
         }
     }
@@ -278,7 +278,8 @@ fun DashboardCard(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Medium,
-                    fontFamily = Poppins
+                    fontFamily = Poppins,
+                    fontSize = 14.sp
                 ),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -295,7 +296,7 @@ fun HyoBottomNavigationBar(
     val items = listOf(
         BottomNavItem("Home", Icons.Filled.Home, AppRoutes.HOME_SCREEN),
         BottomNavItem("Camera", Icons.Filled.CameraAlt, AppRoutes.SIGN_LANGUAGE_CAMERA_SCREEN), // Added Camera route
-        BottomNavItem("Chat", Icons.Filled.MailOutline, AppRoutes.CHAT_SCREEN),
+        BottomNavItem("Dictionary", Icons.Filled.Book, AppRoutes.CHAT_SCREEN),
         BottomNavItem("Menu", Icons.Filled.Menu, AppRoutes.MENU_SCREEN)
     )
 
