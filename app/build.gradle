@@ -150,6 +150,5 @@ dependencies {
     implementation "androidx.room:room-ktx:2.5.2"
 
     // pytorch
-    implementation 'org.pytorch:pytorch_android:1.13.1'
-    implementation 'org.pytorch:pytorch_android_torchvision:1.13.1'
+    implementation 'com.google.mediapipe:tasks-vision:0.10.14'
 }
