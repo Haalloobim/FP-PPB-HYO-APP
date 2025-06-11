@@ -40,7 +40,7 @@ import com.app.hyo.ui.theme.Poppins // Assuming Poppins is your app's font
 
 // Define routes for navigation
 object AppRoutes {
-    const val HOME_SCREEN = "home_screen_route"
+    const val HOME_SCREEN = "dashboard_screen_route"
     const val SIGN_LANGUAGE_CAMERA_SCREEN = "sign_language_camera_screen_route"
     const val LEARN_ISL_SCREEN = "learn_isl_screen_route"
     const val PRACTICE_ISL_SCREEN = "practice_isl_screen_route"
@@ -69,16 +69,6 @@ fun DashboardScreen(
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp
                     )
-                },
-                actions = {
-                    IconButton(onClick = onProfileClick) {
-                        Icon(
-                            imageVector = Icons.Filled.AccountCircle,
-                            contentDescription = "Profile",
-                            modifier = Modifier.size(32.dp),
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer // Explicit tint for clarity
-                        )
-                    }
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
@@ -297,7 +287,7 @@ fun HyoBottomNavigationBar(
         BottomNavItem("Home", Icons.Filled.Home, AppRoutes.HOME_SCREEN),
         BottomNavItem("Camera", Icons.Filled.CameraAlt, AppRoutes.SIGN_LANGUAGE_CAMERA_SCREEN), // Added Camera route
         BottomNavItem("Dictionary", Icons.Filled.Book, AppRoutes.DICTIONARY_SCREEN), // <-- CHANGE THIS LINE
-        BottomNavItem("Menu", Icons.Filled.Menu, AppRoutes.MENU_SCREEN)
+        BottomNavItem("Account", Icons.Filled.AccountCircle, AppRoutes.PROFILE_SCREEN)
     )
 
     NavigationBar(

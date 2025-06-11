@@ -24,6 +24,7 @@ import com.app.hyo.presentation.login.LoginScreen
 import com.app.hyo.presentation.onboarding.OnBoardingScreen
 import com.app.hyo.presentation.onboarding.OnBoardingViewModel
 import com.app.hyo.presentation.onboarding.OnBoardingNavigationEvent
+import com.app.hyo.presentation.profile.ProfileScreen
 import com.app.hyo.presentation.register.RegisterScreen
 
 
@@ -51,10 +52,10 @@ fun NavGraph(
         composable(route = Route.LoginScreen.route) {
             LoginScreen(
                 onLoginClick = {
-                    // Navigate to Dashboard/Home after login
-                    navController.navigate(Route.HyoNavigation.route) { // Or directly to DashboardScreen
-                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    navController.navigate(AppRoutes.HOME_SCREEN) {
+                        popUpTo(Route.LoginScreen.route) { inclusive = true }
                         launchSingleTop = true
+                        restoreState = true
                     }
                 },
                 onRegisterNavigateClick = {
@@ -90,19 +91,20 @@ fun NavGraph(
             route = Route.HyoNavigation.route,
             startDestination = Route.DashboardScreen.route // Default to Dashboard
         ) {
-            composable(route = Route.DashboardScreen.route) {
+            composable(route = AppRoutes.HOME_SCREEN) {
                 // val viewModel: DashboardViewModel = hiltViewModel() // If you need ViewModel here
                 DashboardScreen(
-                    onProfileClick = {
-                        // TODO: Navigate to Profile Screen
-                        // navController.navigate("profile_screen_route")
-                    },
                     onNavigateToRoute = { route ->
-
                         navController.navigate(route) {
-
+                            popUpTo(AppRoutes.HOME_SCREEN) { saveState = true }
                             launchSingleTop = true
-                            // Restore state when reselecting a previously selected item
+                            restoreState = true
+                        }
+                    },
+                    onProfileClick = {
+                        navController.navigate(AppRoutes.PROFILE_SCREEN) {
+                            popUpTo(AppRoutes.HOME_SCREEN) { saveState = true }
+                            launchSingleTop = true
                             restoreState = true
                         }
                     }
@@ -111,13 +113,15 @@ fun NavGraph(
             composable(route = AppRoutes.DICTIONARY_SCREEN) {
                 DictionaryScreen(
                     onBackClick = {
-                        navController.popBackStack()
+                        navController.navigate(AppRoutes.HOME_SCREEN) {
+                            popUpTo(AppRoutes.HOME_SCREEN) { inclusive = false }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     },
                     onNavigateToRoute = { route ->
                         navController.navigate(route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
+                            popUpTo(AppRoutes.HOME_SCREEN) { saveState = true }
                             launchSingleTop = true
                             restoreState = true
                         }
@@ -131,11 +135,29 @@ fun NavGraph(
                     }
                 )
             }
-            composable(route = Route.HomeScreen.route) { // Keep if you have a separate HomeScreen
-                // TODO: Add HomeScreen content or redirect to Dashboard
-                Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.error)) {
-                    Text("Old Home Screen - Should navigate to Dashboard")
-                }
+//            composable(route = Route.HomeScreen.route) { // Keep if you have a separate HomeScreen
+//                // TODO: Add HomeScreen content or redirect to Dashboard
+//                Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.error)) {
+//                    Text("Old Home Screen - Should navigate to Dashboard")
+//                }
+//            }
+            composable(route = AppRoutes.PROFILE_SCREEN) {
+                ProfileScreen(
+                    onBackClick = {
+                        navController.navigate(AppRoutes.HOME_SCREEN) {
+                            popUpTo(AppRoutes.HOME_SCREEN) { inclusive = false }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onNavigateToRoute = { route ->
+                        navController.navigate(route) {
+                            popUpTo(AppRoutes.HOME_SCREEN) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
             }
             // Add other destinations within HyoNavigation here
             // e.g., composable("profile_screen_route") { ProfileScreen(...) }
