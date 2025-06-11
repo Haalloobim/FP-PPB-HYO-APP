@@ -296,7 +296,7 @@ fun HyoBottomNavigationBar(
     val items = listOf(
         BottomNavItem("Home", Icons.Filled.Home, AppRoutes.HOME_SCREEN),
         BottomNavItem("Camera", Icons.Filled.CameraAlt, AppRoutes.SIGN_LANGUAGE_CAMERA_SCREEN), // Added Camera route
-        BottomNavItem("Dictionary", Icons.Filled.Book, AppRoutes.CHAT_SCREEN),
+        BottomNavItem("Dictionary", Icons.Filled.Book, AppRoutes.DICTIONARY_SCREEN), // <-- CHANGE THIS LINE
         BottomNavItem("Menu", Icons.Filled.Menu, AppRoutes.MENU_SCREEN)
     )
 

@@ -11,8 +11,8 @@ sealed class Route(
     object LoginScreen : Route(route = "loginScreen")
     object HomeScreen : Route(route = "homeScreen") // This might be your Dashboard
     object DashboardScreen : Route(route = "dashboardScreen")
-    object ChatbotScreen : Route(route = "chatbotScreen") // New Chatbot Route
-    object SignLanguageCameraScreen : Route(route = "signLanguageCameraScreen") // New screen route
+    object DictionaryScreen : Route(route = "dictionaryScreen") // <-- ADD THIS LINE
+    object ChatbotScreen : Route(route = "chatbotScreen")
+    object SignLanguageCameraScreen : Route(route = "signLanguageCameraScreen")
     object AppStartNavigation : Route(route = "appStartNavigation")
-    object HyoNavigation : Route(route = "hyoNavigation") // Main app navigation after login/onboarding
-}
+    object HyoNavigation : Route(route = "hyoNavigation") }

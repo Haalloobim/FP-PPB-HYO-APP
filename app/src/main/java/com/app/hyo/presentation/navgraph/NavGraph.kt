@@ -16,7 +16,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.app.hyo.presentation.camerax.SignLanguageCameraScreen
+import com.app.hyo.presentation.dashboard.AppRoutes
 import com.app.hyo.presentation.dashboard.DashboardScreen
+import com.app.hyo.presentation.dictionary.DictionaryScreen
 // import com.app.hyo.presentation.dashboard.DashboardViewModel // Uncomment if needed directly
 import com.app.hyo.presentation.login.LoginScreen
 import com.app.hyo.presentation.onboarding.OnBoardingScreen
@@ -101,6 +103,22 @@ fun NavGraph(
 
                             launchSingleTop = true
                             // Restore state when reselecting a previously selected item
+                            restoreState = true
+                        }
+                    }
+                )
+            }
+            composable(route = AppRoutes.DICTIONARY_SCREEN) {
+                DictionaryScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onNavigateToRoute = { route ->
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
                             restoreState = true
                         }
                     }
