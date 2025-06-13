@@ -15,7 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.app.hyo.presentation.camerax.SignLanguageCameraScreen
+import com.app.hyo.presentation.camerax.CameraScreen
 import com.app.hyo.presentation.dashboard.AppRoutes
 import com.app.hyo.presentation.dashboard.DashboardScreen
 import com.app.hyo.presentation.dictionary.DictionaryScreen
@@ -129,10 +129,8 @@ fun NavGraph(
                 )
             }
             composable(route = "sign_language_camera_screen_route") {
-                SignLanguageCameraScreen(
-                    onNavigateBack = {
-                        navController.popBackStack()
-                    }
+                CameraScreen(
+                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
                 )
             }
 //            composable(route = Route.HomeScreen.route) { // Keep if you have a separate HomeScreen
