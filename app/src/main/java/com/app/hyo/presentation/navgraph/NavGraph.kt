@@ -118,10 +118,13 @@ fun NavGraph(
                     }
                 )
             }
-            composable(route = "sign_language_camera_screen_route") {
+            // Replace this composable block in your NavGraph.kt
+            composable(route = AppRoutes.SIGN_LANGUAGE_CAMERA_SCREEN) {
                 CameraScreen(
-                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-                    viewModel = hiltViewModel() // Assuming you have a ViewModel for Camera
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
+                    onBackClick = { navController.popBackStack() }
                 )
             }
             composable(route = AppRoutes.PROFILE_SCREEN) {

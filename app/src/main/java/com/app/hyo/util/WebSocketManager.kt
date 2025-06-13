@@ -13,7 +13,7 @@ object WebSocketManager {
 
     fun init(viewModel: PredictViewModel) {
         val request = Request.Builder()
-            .url("ws://192.168.100.50:5000/ws")
+            .url("https://a7b2-103-119-141-209.ngrok-free.app/")
             .build()
 
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
