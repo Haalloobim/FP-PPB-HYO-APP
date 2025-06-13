@@ -1,7 +1,13 @@
 package com.app.hyo.presentation.navgraph
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -9,16 +15,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.app.hyo.presentation.camerax.SignLanguageCameraScreen
+import com.app.hyo.presentation.camerax.CameraScreen
 import com.app.hyo.presentation.dashboard.AppRoutes
 import com.app.hyo.presentation.dashboard.DashboardScreen
 import com.app.hyo.presentation.dictionary.DictionaryScreen
+// import com.app.hyo.presentation.dashboard.DashboardViewModel // Uncomment if needed directly
 import com.app.hyo.presentation.login.LoginScreen
 import com.app.hyo.presentation.onboarding.OnBoardingScreen
 import com.app.hyo.presentation.onboarding.OnBoardingViewModel
 import com.app.hyo.presentation.onboarding.OnBoardingNavigationEvent
 import com.app.hyo.presentation.profile.ProfileScreen
 import com.app.hyo.presentation.register.RegisterScreen
+
 
 @Composable
 fun NavGraph(
@@ -46,6 +54,7 @@ fun NavGraph(
                     navController.navigate(Route.HyoNavigation.route) {
                         popUpTo(navController.graph.startDestinationId) { inclusive = true }
                         launchSingleTop = true
+                        restoreState = true
                     }
                 },
                 onRegisterNavigateClick = {
@@ -109,11 +118,10 @@ fun NavGraph(
                     }
                 )
             }
-            composable(route = AppRoutes.SIGN_LANGUAGE_CAMERA_SCREEN) {
-                SignLanguageCameraScreen(
-                    onNavigateBack = {
-                        navController.popBackStack()
-                    }
+            composable(route = "sign_language_camera_screen_route") {
+                CameraScreen(
+                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                    viewModel = hiltViewModel() // Assuming you have a ViewModel for Camera
                 )
             }
             composable(route = AppRoutes.PROFILE_SCREEN) {
