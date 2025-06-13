@@ -5,12 +5,13 @@ import android.util.Log
 import okhttp3.*
 import okio.ByteString
 import java.io.ByteArrayOutputStream
+import com.app.hyo.presentation.camerax.PredictViewModel
 
 object WebSocketManager {
     private val client = OkHttpClient()
     private lateinit var webSocket: WebSocket
 
-    fun init() {
+    fun init(viewModel: PredictViewModel) {
         val request = Request.Builder()
             .url("ws://192.168.100.50:5000/ws")
             .build()
@@ -22,6 +23,7 @@ object WebSocketManager {
 
             override fun onMessage(webSocket: WebSocket, text: String) {
                 Log.d("WebSocket", "Received: $text")
+                viewModel.updateState(text)
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {

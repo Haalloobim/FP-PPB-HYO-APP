@@ -130,7 +130,8 @@ fun NavGraph(
             }
             composable(route = "sign_language_camera_screen_route") {
                 CameraScreen(
-                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                    viewModel = hiltViewModel() // Assuming you have a ViewModel for Camera
                 )
             }
 //            composable(route = Route.HomeScreen.route) { // Keep if you have a separate HomeScreen
