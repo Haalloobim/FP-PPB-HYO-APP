@@ -1,9 +1,9 @@
-package com.app.hyo.presentation.login // Changed from .register
+package com.app.hyo.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-// Assuming AppEntryUseCases might still be relevant after login, or you might have specific LoginUseCases
-import com.app.hyo.domain.usecases.app_entry.AppEntryUseCases
+import com.app.hyo.domain.manger.LocalUserManger
+import com.app.hyo.domain.manger.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -11,50 +11,50 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor( // Changed from RegisterViewModel
-    private val appEntryUseCases: AppEntryUseCases // Or replace with LoginUseCases if applicable
+class LoginViewModel @Inject constructor(
+    private val userRepository: UserRepository,
+    private val localUserManger: LocalUserManger // Injected LocalUserManger
 ) : ViewModel() {
 
-    private val _loginEvents = Channel<LoginEventState>() // Changed from _registrationEvents and RegistrationEventState
-    val loginEvents = _loginEvents.receiveAsFlow() // Changed from registrationEvents
+    private val _loginEvents = Channel<LoginEventState>()
+    val loginEvents = _loginEvents.receiveAsFlow()
 
-    fun onEvent(event: LoginEvent) { // Changed from RegisterEvent
+    fun onEvent(event: LoginEvent) {
         when (event) {
-            is LoginEvent.LoginUser -> { // Changed from RegisterEvent.RegisterUser
-                loginUser(event.email, event.password) // Changed from registerUser
+            is LoginEvent.LoginUser -> {
+                if (event.email.isBlank() || event.password.isBlank()) {
+                    viewModelScope.launch {
+                        _loginEvents.send(LoginEventState.Error("Email and password cannot be empty."))
+                    }
+                    return
+                }
+                loginUser(event.email, event.password)
             }
         }
     }
 
-    private fun loginUser(email: String, password: String) { // Changed from registerUser
+    private fun loginUser(email: String, password: String) {
         viewModelScope.launch {
+            _loginEvents.send(LoginEventState.Loading)
             try {
-                // TODO: Implement actual user login logic here.
-                // For demonstration, simulating a successful login
-                println("Attempting to login user with email: $email and password: $password")
-
-                // Simulate a network call or a repository operation
-                kotlinx.coroutines.delay(1000) // Simulate async operation
-
-                // Simulate success
-                _loginEvents.send(LoginEventState.Success) // Changed from _registrationEvents and RegistrationEventState
-
-                // If successful login should also save app entry state
-                // (e.g., to mark user as logged in).
-                // This depends on your app's specific flow.
-                // appEntryUseCases.saveAppEntry() // Or a similar method for login state
-
+                when (val result = userRepository.loginUser(email, password)) {
+                    is com.app.hyo.domain.manger.Result.Success -> {
+                        localUserManger.saveUserEmail(result.data.email) // Save user email to session
+                        _loginEvents.send(LoginEventState.Success(result.data.name))
+                    }
+                    is com.app.hyo.domain.manger.Result.Error -> {
+                        _loginEvents.send(LoginEventState.Error(result.exception.message ?: "Login failed"))
+                    }
+                }
             } catch (e: Exception) {
-                // Simulate failure
-                _loginEvents.send(LoginEventState.Error(e.message ?: "Unknown login error")) // Changed
+                _loginEvents.send(LoginEventState.Error(e.message ?: "Unknown login error"))
             }
         }
     }
 }
 
-// Sealed class for login events state
-sealed class LoginEventState { // Changed from RegistrationEventState
-    object Success : LoginEventState()
+sealed class LoginEventState {
+    data class Success(val userName: String) : LoginEventState()
     data class Error(val message: String) : LoginEventState()
-    object Loading : LoginEventState() // Optional: for showing loading indicator
+    object Loading : LoginEventState()
 }

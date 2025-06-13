@@ -20,16 +20,42 @@ import com.app.hyo.presentation.register.components.RegisterPage
 import com.app.hyo.presentation.common.HyoRegisterButton
 import com.app.hyo.presentation.common.HyoTextButton
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel // Import Hilt ViewModel
+import android.widget.Toast // For showing messages
+
 @Composable
 fun RegisterScreen(
-    onRegisterClick: () -> Unit,
-    onLoginClick: () -> Unit
+    onRegisterSuccessNavigation: () -> Unit, // For navigating after successful registration
+    onLoginClick: () -> Unit,
+    viewModel: RegisterViewModel = hiltViewModel()
 ) {
     var name by remember { mutableStateOf("") }
     var telepon by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") } // Keep for UI, validation should be in VM or here
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.registrationEvents.collect { event ->
+            when (event) {
+                is RegistrationEventState.Success -> {
+                    Toast.makeText(context, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                    onRegisterSuccessNavigation() // Navigate to login or dashboard
+                }
+                is RegistrationEventState.Error -> {
+                    Toast.makeText(context, "Error: ${event.message}", Toast.LENGTH_LONG).show()
+                }
+                is RegistrationEventState.Loading -> {
+                    // Optionally show a loading indicator
+                    Toast.makeText(context, "Registering...", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -51,9 +77,16 @@ fun RegisterScreen(
             onConfirmPasswordChange = { confirmPassword = it }
         )
         Spacer(modifier = Modifier.height(MediumPadding2))
-        HyoRegisterButton(
+
+        HyoRegisterButton( // Assuming this is a Composable from your common components
             text = "Register",
-            onClick = onRegisterClick
+            onClick = {
+                if (password != confirmPassword) {
+                    Toast.makeText(context, "Passwords do not match!", Toast.LENGTH_SHORT).show()
+                    return@HyoRegisterButton
+                }
+                viewModel.onEvent(RegisterEvent.RegisterUser(email, password), name, telepon)
+            }
         )
 
         Spacer(modifier = Modifier.height(SmallPadding2))
@@ -68,7 +101,7 @@ fun RegisterScreen(
 @Composable
 fun RegisterScreenPreview() {
     RegisterScreen(
-        onRegisterClick = {},
+        onRegisterSuccessNavigation = {},
         onLoginClick = {}
     )
 }

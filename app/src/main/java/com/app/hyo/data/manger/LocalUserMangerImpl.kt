@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.app.hyo.domain.manger.LocalUserManger
 import com.app.hyo.util.Constants
@@ -27,6 +28,24 @@ class LocalUserMangerImpl(
             preferences[PreferenceKeys.APP_ENTRY] ?: false
         }
     }
+
+    override suspend fun saveUserEmail(email: String) {
+        context.dataStore.edit { settings ->
+            settings[PreferenceKeys.LOGGED_IN_USER_EMAIL] = email
+        }
+    }
+
+    override fun readUserEmail(): Flow<String?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[PreferenceKeys.LOGGED_IN_USER_EMAIL]
+        }
+    }
+
+    override suspend fun clearUserSession() {
+        context.dataStore.edit { settings ->
+            settings.remove(PreferenceKeys.LOGGED_IN_USER_EMAIL)
+        }
+    }
 }
 
 private val readOnlyProperty = preferencesDataStore(name = USER_SETTINGS)
@@ -35,4 +54,5 @@ val Context.dataStore: DataStore<Preferences> by readOnlyProperty
 
 private object PreferenceKeys {
     val APP_ENTRY = booleanPreferencesKey(Constants.APP_ENTRY)
+    val LOGGED_IN_USER_EMAIL = stringPreferencesKey(Constants.LOGGED_IN_USER_EMAIL)
 }

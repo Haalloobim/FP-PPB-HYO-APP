@@ -67,7 +67,9 @@ fun DashboardScreen(
                         text = "HYO",
                         fontFamily = Poppins,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp
+                        fontSize = 24.sp,
+                        // align center
+                        textAlign = TextAlign.Center
                     )
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(

@@ -24,16 +24,42 @@ import com.app.hyo.presentation.Dimens.MediumPadding2
 import com.app.hyo.presentation.Dimens.SmallPadding2
 import com.app.hyo.presentation.login.components.LoginPage // Changed from .register.components.RegisterPage
 import com.app.hyo.R
-import com.app.hyo.presentation.common.HyoButton // Changed from HyoRegisterButton - You might need to create this or reuse a generic button
+import com.app.hyo.presentation.common.HyoButton // Changed from TumbasRegisterButton - You might need to create this or reuse a generic button
 import com.app.hyo.presentation.common.HyoTextButton
+
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel // Import Hilt ViewModel
+import android.widget.Toast // For showing messages
 
 @Composable
 fun LoginScreen( // Changed from RegisterScreen
-    onLoginClick: () -> Unit, // Changed from onRegisterClick
-    onRegisterNavigateClick: () -> Unit // Changed from onLoginClick, assuming navigation to register
+    onLoginSuccessNavigation: () -> Unit, // For navigating after successful login
+    onRegisterNavigateClick: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel()// Changed from onLoginClick, assuming navigation to register
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.loginEvents.collect { event ->
+            when (event) {
+                is LoginEventState.Success -> {
+                    Toast.makeText(context, "Login Successful! Welcome ${event.userName}", Toast.LENGTH_SHORT).show()
+                    onLoginSuccessNavigation() // Navigate to dashboard
+                }
+                is LoginEventState.Error -> {
+                    Toast.makeText(context, "Error: ${event.message}", Toast.LENGTH_LONG).show()
+                }
+                is LoginEventState.Loading -> {
+                    // Optionally show a loading indicator
+                    Toast.makeText(context, "Logging in...", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -42,20 +68,17 @@ fun LoginScreen( // Changed from RegisterScreen
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LoginPage( // Changed from RegisterPage
+        LoginPage(
             email = email,
             onEmailChange = { email = it },
             password = password,
             onPasswordChange = { password = it }
         )
         Spacer(modifier = Modifier.height(MediumPadding2))
-        HyoButton( // Changed from HyoRegisterButton
-            text = "Login", // Changed from "Register"
+        HyoButton( // Assuming TumbasButton is your generic button
+            text = "Login",
             onClick = {
-                // Here you would typically call something like:
-                // viewModel.onEvent(LoginEvent.LoginUser(email, password))
-                // For now, just invoking the passed lambda
-                onLoginClick()
+                viewModel.onEvent(LoginEvent.LoginUser(email, password))
             }
         )
 
@@ -71,7 +94,7 @@ fun LoginScreen( // Changed from RegisterScreen
 @Composable
 fun LoginScreenPreview() { // Changed from RegisterScreenPreview
     LoginScreen( // Changed from RegisterScreen
-        onLoginClick = {},
+        onLoginSuccessNavigation = {},
         onRegisterNavigateClick = {}
     )
 }

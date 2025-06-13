@@ -1,13 +1,7 @@
 package com.app.hyo.presentation.navgraph
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -19,14 +13,12 @@ import com.app.hyo.presentation.camerax.SignLanguageCameraScreen
 import com.app.hyo.presentation.dashboard.AppRoutes
 import com.app.hyo.presentation.dashboard.DashboardScreen
 import com.app.hyo.presentation.dictionary.DictionaryScreen
-// import com.app.hyo.presentation.dashboard.DashboardViewModel // Uncomment if needed directly
 import com.app.hyo.presentation.login.LoginScreen
 import com.app.hyo.presentation.onboarding.OnBoardingScreen
 import com.app.hyo.presentation.onboarding.OnBoardingViewModel
 import com.app.hyo.presentation.onboarding.OnBoardingNavigationEvent
 import com.app.hyo.presentation.profile.ProfileScreen
 import com.app.hyo.presentation.register.RegisterScreen
-
 
 @Composable
 fun NavGraph(
@@ -37,8 +29,7 @@ fun NavGraph(
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = Route.RegistrationScreen.route) {
             RegisterScreen(
-                onRegisterClick = {
-                    // Navigate to Login or Dashboard/Home after registration
+                onRegisterSuccessNavigation = {
                     navController.navigate(Route.LoginScreen.route) {
                         popUpTo(Route.RegistrationScreen.route) { inclusive = true }
                     }
@@ -51,11 +42,10 @@ fun NavGraph(
 
         composable(route = Route.LoginScreen.route) {
             LoginScreen(
-                onLoginClick = {
-                    navController.navigate(AppRoutes.HOME_SCREEN) {
-                        popUpTo(Route.LoginScreen.route) { inclusive = true }
+                onLoginSuccessNavigation = {
+                    navController.navigate(Route.HyoNavigation.route) {
+                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
                         launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 onRegisterNavigateClick = {
@@ -74,7 +64,6 @@ fun NavGraph(
                     viewModel.navigationEvents.collect { event ->
                         when (event) {
                             is OnBoardingNavigationEvent.NavigateToRegistration -> {
-                                // Navigate to Registration after onboarding
                                 navController.navigate(Route.RegistrationScreen.route) {
                                     popUpTo(Route.AppStartNavigation.route) { inclusive = true }
                                 }
@@ -86,13 +75,11 @@ fun NavGraph(
             }
         }
 
-        // Main application navigation (after login/onboarding)
         navigation(
             route = Route.HyoNavigation.route,
-            startDestination = Route.DashboardScreen.route // Default to Dashboard
+            startDestination = AppRoutes.HOME_SCREEN
         ) {
             composable(route = AppRoutes.HOME_SCREEN) {
-                // val viewModel: DashboardViewModel = hiltViewModel() // If you need ViewModel here
                 DashboardScreen(
                     onNavigateToRoute = { route ->
                         navController.navigate(route) {
@@ -112,13 +99,7 @@ fun NavGraph(
             }
             composable(route = AppRoutes.DICTIONARY_SCREEN) {
                 DictionaryScreen(
-                    onBackClick = {
-                        navController.navigate(AppRoutes.HOME_SCREEN) {
-                            popUpTo(AppRoutes.HOME_SCREEN) { inclusive = false }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
+                    onBackClick = { navController.popBackStack() },
                     onNavigateToRoute = { route ->
                         navController.navigate(route) {
                             popUpTo(AppRoutes.HOME_SCREEN) { saveState = true }
@@ -128,47 +109,36 @@ fun NavGraph(
                     }
                 )
             }
-            composable(route = "sign_language_camera_screen_route") {
+            composable(route = AppRoutes.SIGN_LANGUAGE_CAMERA_SCREEN) {
                 SignLanguageCameraScreen(
                     onNavigateBack = {
                         navController.popBackStack()
                     }
                 )
             }
-//            composable(route = Route.HomeScreen.route) { // Keep if you have a separate HomeScreen
-//                // TODO: Add HomeScreen content or redirect to Dashboard
-//                Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.error)) {
-//                    Text("Old Home Screen - Should navigate to Dashboard")
-//                }
-//            }
             composable(route = AppRoutes.PROFILE_SCREEN) {
                 ProfileScreen(
-                    onBackClick = {
-                        navController.navigate(AppRoutes.HOME_SCREEN) {
-                            popUpTo(AppRoutes.HOME_SCREEN) { inclusive = false }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
+                    onBackClick = { navController.popBackStack() },
                     onNavigateToRoute = { route ->
                         navController.navigate(route) {
                             popUpTo(AppRoutes.HOME_SCREEN) { saveState = true }
                             launchSingleTop = true
                             restoreState = true
                         }
+                    },
+                    onLogout = {
+                        navController.navigate(Route.LoginScreen.route) {
+                            popUpTo(Route.HyoNavigation.route) {
+                                inclusive = true
+                            }
+                        }
                     }
                 )
             }
-            // Add other destinations within HyoNavigation here
-            // e.g., composable("profile_screen_route") { ProfileScreen(...) }
-            // composable("search_screen_route") { SearchScreen(...) }
         }
     }
 }
 
-// Extension function to find the start destination of the graph
-// This is useful for bottom navigation to pop up to the correct start destination.
 fun NavHostController.findStartDestination(): androidx.navigation.NavDestination? {
     return this.graph.findNode(this.graph.startDestinationId)
 }
-

@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,24 +16,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.hyo.presentation.Dimens
 import com.app.hyo.presentation.dashboard.AppRoutes
 import com.app.hyo.presentation.dashboard.HyoBottomNavigationBar
 import com.app.hyo.ui.theme.Poppins
 import androidx.compose.ui.tooling.preview.Preview
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen(
-    onBackClick: () -> Unit = {},
-    onNavigateToRoute: (String) -> Unit = {},
-    viewModel: ProfileViewModel = viewModel()
+    onBackClick: () -> Unit,
+    onNavigateToRoute: (String) -> Unit,
+    onLogout: () -> Unit, // Callback for logout navigation
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    val userProfile by viewModel.userProfile.collectAsState()
+    val user by viewModel.user.collectAsState()
     var menuExpanded by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.navigationEvent.collect { event ->
+            when (event) {
+                is ProfileViewModel.NavigationEvent.NavigateToLogin -> {
+                    onLogout()
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -61,16 +72,10 @@ fun ProfileScreen(
                         onDismissRequest = { menuExpanded = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("Edit Profile") },
-                            onClick = {
-                                viewModel.editProfile("New Name", "new.email@example.com")
-                                menuExpanded = false
-                            }
-                        )
-                        DropdownMenuItem(
                             text = { Text("Log Out") },
+                            leadingIcon = { Icon(Icons.Default.ExitToApp, contentDescription = "Log Out")},
                             onClick = {
-                                viewModel.logout()
+                                viewModel.onLogoutClick()
                                 menuExpanded = false
                             }
                         )
@@ -110,36 +115,32 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = userProfile.name,
-                fontSize = 24.sp,
-                fontFamily = Poppins
-            )
+            if (user != null) {
+                Text(
+                    text = user!!.name,
+                    fontSize = 24.sp,
+                    fontFamily = Poppins
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = userProfile.email,
-                fontSize = 16.sp,
-                fontFamily = Poppins,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+                Text(
+                    text = user!!.email,
+                    fontSize = 16.sp,
+                    fontFamily = Poppins,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                CircularProgressIndicator()
+            }
         }
     }
 }
 
-@Preview(showBackground = true, name = "Profile Screen Light")
+@Preview(showBackground = true, name = "Profile Screen")
 @Composable
-fun ProfileScreenPreviewLight() {
-    com.app.hyo.ui.theme.HyoTheme(darkTheme = false) {
-        ProfileScreen()
-    }
-}
-
-@Preview(showBackground = true, name = "Profile Screen Dark")
-@Composable
-fun ProfileScreenPreviewDark() {
-    com.app.hyo.ui.theme.HyoTheme(darkTheme = true) {
-        ProfileScreen()
+fun ProfileScreenPreview() {
+    com.app.hyo.ui.theme.HyoTheme {
+        ProfileScreen(onBackClick = {}, onNavigateToRoute = {}, onLogout = {})
     }
 }
