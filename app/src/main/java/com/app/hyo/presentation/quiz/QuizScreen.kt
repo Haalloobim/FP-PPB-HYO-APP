@@ -14,6 +14,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -31,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.app.hyo.R
 import com.app.hyo.presentation.Dimens
 import com.app.hyo.ui.theme.HyoTheme
 import com.app.hyo.ui.theme.Poppins
@@ -44,6 +47,40 @@ fun QuizScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+
+    // Create and remember a SoundPool
+    val soundPool = remember {
+        val attributes = android.media.AudioAttributes.Builder()
+            .setUsage(android.media.AudioAttributes.USAGE_GAME)
+            .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
+        android.media.SoundPool.Builder().setAudioAttributes(attributes).setMaxStreams(2).build()
+    }
+
+    // Load the sounds and remember their IDs
+    val correctSoundId = remember { soundPool.load(context, R.raw.correct, 1) }
+    val wrongSoundId = remember { soundPool.load(context, R.raw.incorrect, 1) }
+
+    // Use LaunchedEffect to listen for events from the ViewModel
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.soundEvent.collect { event ->
+            when (event) {
+                is QuizViewModel.QuizSoundEvent.PlayCorrectSound -> {
+                    soundPool.play(correctSoundId, 1f, 1f, 0, 0, 1f)
+                }
+                is QuizViewModel.QuizSoundEvent.PlayWrongSound -> {
+                    soundPool.play(wrongSoundId, 1f, 1f, 0, 0, 1f)
+                }
+            }
+        }
+    }
+
+    // Remember to release the sound pool when the composable is disposed
+    DisposableEffect(Unit) {
+        onDispose {
+            soundPool.release()
+        }
+    }
 
     Scaffold(
         topBar = {

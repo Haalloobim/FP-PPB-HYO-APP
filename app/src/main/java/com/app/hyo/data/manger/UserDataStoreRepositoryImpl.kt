@@ -104,4 +104,28 @@ class UserDataStoreRepositoryImpl(private val context: Context) : UserRepository
             emptyList()
         }
     }
+
+    override suspend fun addQuizResultToUser(email: String, quizResult: com.app.hyo.domain.model.QuizResult): Result<Unit> {
+        return try {
+            val currentUsersJson = context.userDataStore.data.first()[UserDataStoreKeys.USERS_LIST] ?: "[]"
+            val users = Json.decodeFromString<MutableList<User>>(currentUsersJson)
+
+            val userIndex = users.indexOfFirst { it.email == email }
+            if (userIndex != -1) {
+                val oldUser = users[userIndex]
+                val updatedHistory = oldUser.quizHistory + quizResult
+                val updatedUser = oldUser.copy(quizHistory = updatedHistory)
+                users[userIndex] = updatedUser
+
+                context.userDataStore.edit { preferences ->
+                    preferences[UserDataStoreKeys.USERS_LIST] = Json.encodeToString(users)
+                }
+                Result.Success(Unit)
+            } else {
+                Result.Error(Exception("User not found."))
+            }
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }

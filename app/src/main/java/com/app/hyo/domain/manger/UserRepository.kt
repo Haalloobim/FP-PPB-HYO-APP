@@ -8,6 +8,7 @@ interface UserRepository {
     suspend fun loginUser(email: String, providedRawPassword: String): Result<User>
     fun getUserByEmail(email: String): Flow<User?>
     fun getAllUsers(): Flow<List<User>> // For simplicity with DataStore
+    suspend fun addQuizResultToUser(email: String, quizResult: com.app.hyo.domain.model.QuizResult): Result<Unit>
 
 }
 

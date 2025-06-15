@@ -8,5 +8,6 @@ data class User(
     val name: String,
     val telepon: String,
     val email: String,
-    val hashedPassword: String // Store hashed password, NOT plain text
+    val hashedPassword: String, // Store hashed password, NOT plain text
+    val quizHistory: List<QuizResult> = emptyList()
 )

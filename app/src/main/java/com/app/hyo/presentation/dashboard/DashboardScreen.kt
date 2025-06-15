@@ -16,6 +16,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraAlt// Icon for camera/recognition
 import androidx.compose.material.icons.filled.Book // Icon for dictionary/learn
+import androidx.compose.material.icons.filled.Dataset
+import androidx.compose.material.icons.filled.FrontHand
 import androidx.compose.material.icons.filled.School // Icon for learn/practice
 import androidx.compose.material.icons.filled.People // Icon for community
 import androidx.compose.material.icons.filled.Mic // Icon for practice/speech
@@ -188,13 +190,13 @@ fun DashboardScreen(
                 ) {
                     DashboardCard(
                         modifier = Modifier.weight(1f),
-                        icon = Icons.Filled.Search, // Or a specific dictionary icon
+                        icon = Icons.Filled.Dataset, // Or a specific dictionary icon
                         title = "ISL Dictionary",
                         onClick = { onNavigateToRoute(AppRoutes.DICTIONARY_SCREEN) }
                     )
                     DashboardCard(
                         modifier = Modifier.weight(1f),
-                        icon = Icons.Filled.Mic, // Or a hand icon for practice
+                        icon = Icons.Filled.FrontHand, // Or a hand icon for practice
                         title = "Practice Mode",
                         onClick = { onNavigateToRoute(AppRoutes.PRACTICE_ISL_SCREEN) }
                     )
@@ -255,7 +257,7 @@ fun DashboardCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(Dimens.MediumPadding1),
+                .padding(Dimens.SmallPadding3),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -263,7 +265,7 @@ fun DashboardCard(
                 imageVector = icon,
                 contentDescription = title,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.height(Dimens.SmallPadding1))
             Text(
