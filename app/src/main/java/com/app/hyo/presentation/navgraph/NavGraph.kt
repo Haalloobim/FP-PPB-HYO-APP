@@ -25,6 +25,7 @@ import com.app.hyo.presentation.onboarding.OnBoardingScreen
 import com.app.hyo.presentation.onboarding.OnBoardingViewModel
 import com.app.hyo.presentation.onboarding.OnBoardingNavigationEvent
 import com.app.hyo.presentation.profile.ProfileScreen
+import com.app.hyo.presentation.quiz.QuizScreen
 import com.app.hyo.presentation.register.RegisterScreen
 
 
@@ -124,6 +125,11 @@ fun NavGraph(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
+                    onBackClick = { navController.popBackStack() }
+                )
+            }
+            composable(route = AppRoutes.PRACTICE_ISL_SCREEN) {
+                QuizScreen(
                     onBackClick = { navController.popBackStack() }
                 )
             }
