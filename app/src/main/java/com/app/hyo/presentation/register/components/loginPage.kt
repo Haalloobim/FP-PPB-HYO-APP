@@ -2,11 +2,8 @@ package com.app.hyo.presentation.register.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,12 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.app.hyo.R
 import com.app.hyo.presentation.Dimens.MediumPadding1
 import com.app.hyo.presentation.Dimens.SmallPadding2
-import com.app.hyo.presentation.common.HyoRegisterButton
-import com.app.hyo.presentation.common.HyoTextButton
 import com.app.hyo.presentation.common.HyoTextField
 import com.app.hyo.ui.theme.HyoTheme
 

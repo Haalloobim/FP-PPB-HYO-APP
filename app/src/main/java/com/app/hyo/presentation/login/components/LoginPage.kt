@@ -18,11 +18,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.app.hyo.R
 import com.app.hyo.presentation.Dimens.MediumPadding1
 import com.app.hyo.presentation.Dimens.SmallPadding2
-import com.app.hyo.presentation.common.HyoTextField // Assuming HyoTextField is generic
+import com.app.hyo.presentation.common.HyoTextField
 import com.app.hyo.ui.theme.HyoTheme
 
 @Composable

@@ -2,10 +2,14 @@ package com.app.hyo.util
 
 import android.graphics.Bitmap
 import android.util.Log
-import okhttp3.*
+import com.app.hyo.presentation.camerax.PredictViewModel
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.WebSocket
+import okhttp3.WebSocketListener
 import okio.ByteString
 import java.io.ByteArrayOutputStream
-import com.app.hyo.presentation.camerax.PredictViewModel
 
 object WebSocketManager {
     private val client = OkHttpClient()

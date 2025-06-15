@@ -22,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.app.hyo.presentation.Dimens.MediumPadding2
-import com.app.hyo.presentation.common.HyoTextButton
 import com.app.hyo.presentation.common.HyoButton
+import com.app.hyo.presentation.common.HyoTextButton
 import com.app.hyo.presentation.onboarding.components.OnBoardingPage
 import com.app.hyo.presentation.onboarding.components.PagerIndicator
 import kotlinx.coroutines.launch

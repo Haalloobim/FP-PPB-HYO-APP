@@ -1,15 +1,13 @@
 package com.app.hyo.presentation.navgraph
 
+// import com.app.hyo.presentation.dashboard.DashboardViewModel // Uncomment if needed directly
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,11 +17,10 @@ import com.app.hyo.presentation.camerax.CameraScreen
 import com.app.hyo.presentation.dashboard.AppRoutes
 import com.app.hyo.presentation.dashboard.DashboardScreen
 import com.app.hyo.presentation.dictionary.DictionaryScreen
-// import com.app.hyo.presentation.dashboard.DashboardViewModel // Uncomment if needed directly
 import com.app.hyo.presentation.login.LoginScreen
+import com.app.hyo.presentation.onboarding.OnBoardingNavigationEvent
 import com.app.hyo.presentation.onboarding.OnBoardingScreen
 import com.app.hyo.presentation.onboarding.OnBoardingViewModel
-import com.app.hyo.presentation.onboarding.OnBoardingNavigationEvent
 import com.app.hyo.presentation.profile.ProfileScreen
 import com.app.hyo.presentation.quiz.QuizScreen
 import com.app.hyo.presentation.register.RegisterScreen

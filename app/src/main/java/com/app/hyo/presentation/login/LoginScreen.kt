@@ -1,36 +1,28 @@
 package com.app.hyo.presentation.login // Changed from .register
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme // Assuming MaterialTheme is used generally
-import androidx.compose.material3.Text // Assuming Text is used generally
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource // Assuming colorResource is used generally
-import androidx.compose.ui.text.font.FontWeight // Assuming FontWeight is used generally
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.hyo.presentation.Dimens.MediumPadding2
 import com.app.hyo.presentation.Dimens.SmallPadding2
-import com.app.hyo.presentation.login.components.LoginPage // Changed from .register.components.RegisterPage
-import com.app.hyo.R
-import com.app.hyo.presentation.common.HyoButton // Changed from TumbasRegisterButton - You might need to create this or reuse a generic button
+import com.app.hyo.presentation.common.HyoButton
 import com.app.hyo.presentation.common.HyoTextButton
-
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel // Import Hilt ViewModel
-import android.widget.Toast // For showing messages
+import com.app.hyo.presentation.login.components.LoginPage
 
 @Composable
 fun LoginScreen( // Changed from RegisterScreen
